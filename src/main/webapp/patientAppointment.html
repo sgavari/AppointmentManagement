@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+ <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+<title>Book a Patient Appointment</title>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#alert-danger').hide();
+	$('#alert-success').hide();
+});
+	var app = angular.module("HospitalManagement", []);
+
+	app
+			.controller(
+					"PatientController",
+					function($scope, $http) {
+						$scope.submitPatient = function() {
+							var method = "POST";
+							var url = '/addPatient';
+							$http({
+								method : method,
+								url : url,
+								data : angular.toJson($scope.patientForm),
+								headers : {
+									'Content-Type' : 'application/json'
+								}
+							}).then(_success, _error);
+						};
+						function _success(response) {
+							console.log(response);
+							var message = "Appointment created successfully for patient. Generated patient Id is " + response.data.id;
+							$('#alert-success').html(message);
+							$('#alert-success').show();
+							$('#alert-danger').hide();
+						}
+						function _error(response) {
+							console.log(response.statusText);
+							$('#alert-danger').show();
+							$('#alert-success').html('');
+							$('#alert-success').hide();
+						}
+						//Clear the form
+						function _clearFormData() {
+							$scope.patientForm.id = -1;
+							$scope.patientForm.firstName = "";
+							$scope.patientForm.lastName = "";
+							$scope.patientForm.dob = "";
+							$scope.patientForm.phoneNo = "";
+							$scope.patientForm.email = "";
+
+						}
+						;
+					});
+</script>
+</head>
+<body ng-app="HospitalManagement" ng-controller="PatientController">
+
+<div class="alert alert-danger alert-dismissible fade show" id="alert-danger" role="alert">
+	Error occurred in booking appointment.
+</div>
+
+<div class="alert alert-success alert-dismissible fade show" role="alert" id="alert-success">
+ <span id="info_success"></span>
+</div>
+	<div class="container">
+	<div id="info" style="display: none">
+		<span id="info_success"></span> <span id="info_fail"> Error
+			occurred in creating appointment.</span>
+	</div>
+	<form class="form-horizontal" role="form" ng-submit="submitPatient()">
+		<h1>Hospital Appointment</h1>
+		 <div class="form-group">
+                    <label for="firstName" class="col-sm-3 control-label">First Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" ng-model="patientForm.firstName"  id="firstName" placeholder="First Name" class="form-control" autofocus>
+                    </div>
+          </div>
+		
+		 <div class="form-group">
+                    <label for="firstName" class="col-sm-3 control-label">Last Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" ng-model="patientForm.lastName"  id="lastName" placeholder="Last Name" class="form-control" autofocus>
+                    </div>
+          </div>
+		 <div class="form-group">
+                    <label for="birthDate" class="col-sm-3 control-label">Date of Birth*</label>
+                    <div class="col-sm-9">
+                        <input type="date" id="birthDate" class="form-control" ng-model="patientForm.dob">
+                    </div>
+         </div>
+         
+         <div class="form-group">
+                    <label for="phoneNumber" class="col-sm-3 control-label">Phone number </label>
+                    <div class="col-sm-9">
+                        <input type="phoneNumber" ng-model="patientForm.phoneNo" id="phoneNumber" placeholder="Phone number" class="form-control">
+                        <span class="help-block">Your phone number won't be disclosed anywhere </span>
+                    </div>
+                </div>
+  			<div class="form-group">
+                    <label for="email" class="col-sm-3 control-label">Email* </label>
+                    <div class="col-sm-9">
+                        <input type="email" ng-model="patientForm.email" id="email" placeholder="Email" class="form-control" name= "email">
+                    </div>
+                </div>
+		<button type="submit" class="btn btn-primary btn-block">Book Appointment</button>
+	</form>
+</div>
+</body>
+</html>

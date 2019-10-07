@@ -1,0 +1,7 @@
+target/
+/.classpath
+/.project
+/.settings/
+/.qbcache/
+/logs/
+/Data/
