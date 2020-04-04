@@ -28,7 +28,7 @@ public class PatientController {
 		Patient patient =  patientService.getPatient(id);
 		Response response = new Response();
 		response.setData(patient);
-		response.setMessage(patient == null ? "No data found with given patient id ": "success");
+		response.setMessage(patient == null ? "No data found with tetetet given patient id ": "success");
 		return response;
 	}
 
